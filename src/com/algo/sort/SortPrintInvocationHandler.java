@@ -33,7 +33,9 @@ public class SortPrintInvocationHandler implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         String name = method.getName();
-        Detail annotation = method.getAnnotation(Detail.class);
+        //获取实现类注解
+        Method impl = raw.getClass().getMethod(method.getName(), method.getParameterTypes());
+        Detail annotation = impl.getAnnotation(Detail.class);
         boolean b = annotation != null && annotation.showArr();
         if (args.length == 1 && name.toUpperCase().endsWith(SUFFIX)) {
             long start = System.currentTimeMillis();

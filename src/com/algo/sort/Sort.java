@@ -15,6 +15,7 @@ public class Sort implements ISort {
         int[] arr4 = raw.clone();
         int[] arr5 = raw.clone();
         int[] arr6 = raw.clone();
+        int[] arr7 = raw.clone();
         ISort proxy = (ISort) new SortSupport(new Sort()).getPrinter();
         proxy.bubbleSort(arr1);
         proxy.selectionSort(arr2);
@@ -22,6 +23,7 @@ public class Sort implements ISort {
         proxy.bucketSort(arr4);
         proxy.insertionSort(arr5);
         proxy.radixSort(arr6);
+        proxy.mergeSort(arr7);
     }
 
     @Override
@@ -151,6 +153,48 @@ public class Sort implements ISort {
             System.arraycopy(bucket, 0, arr, 0, arr.length);
             dev *= 10;
         }
+    }
+
+    @Override
+    public void mergeSort(int[] arr) {
+        mergeSort(arr, 0 , arr.length - 1);
+    }
+
+    private void mergeSort(int[] arr, int left, int right){
+        //分割入栈 当L = R时 最小单元为一 开始弹栈合并
+        //合并
+        if(left == right){
+            return;
+        }
+        int mid = left + ((right - left) >> 1);
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+
+    private void merge(int [] arr, int left, int mid, int right){
+        //初始化容器，存放有序数组
+        int[] buf = new int[right - left + 1];
+        int start = 0;
+        int p1 = left;
+        int p2 = mid + 1;
+        //双指针比较两个数组较小的值
+        while(p1 <= mid && p2 <= right){
+            buf[start++] = arr[p1] < arr[p2] ? arr[p1++] : arr[p2++];
+        }
+
+        //处理剩余元素追加在数组尾部
+        while(p1 <= mid){
+            buf[start++] = arr[p1++];
+        }
+
+        while(p2 <= right){
+            buf[start++] = arr[p2++];
+        }
+
+        //复制到原数组
+        System.arraycopy(buf, 0 , arr, left,  buf.length);
+
     }
 
 

@@ -54,4 +54,12 @@ public interface ISort {
      */
     void radixSort(int [] arr);
 
+    /**
+     * 归并排序
+     * 时间复杂度 - O(nlogn)
+     * 空间复杂度 - O(n)
+     * @param arr 数组
+     */
+    void mergeSort(int [] arr);
+
 }
