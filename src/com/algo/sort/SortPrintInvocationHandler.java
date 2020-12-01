@@ -33,14 +33,16 @@ public class SortPrintInvocationHandler implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         String name = method.getName();
+        Detail annotation = method.getAnnotation(Detail.class);
+        boolean b = annotation != null && annotation.showArr();
         if (args.length == 1 && name.toUpperCase().endsWith(SUFFIX)) {
             long start = System.currentTimeMillis();
             Object result = method.invoke(raw, args);
             long end = System.currentTimeMillis();
             stdPrint(name, end - start);
-//            if(args[0] instanceof int []){
-//                System.out.println(Arrays.toString((int[]) args[0]));
-//            }
+            if(b && args[0] != null && args[0] instanceof int []){
+                System.out.println(Arrays.toString((int[]) args[0]));
+            }
             return result;
         } else {
             return method.invoke(raw, args);
